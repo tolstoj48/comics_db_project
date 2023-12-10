@@ -7,7 +7,8 @@ CREATE TABLE titles (
     pages INTEGER,
     price INTEGER,
     link_publisher TEXT,
-    FOREIGN KEY(link_publisher) REFERENCES publishers(publisher_id)
+    publisher_id INTEGER,
+    FOREIGN KEY(publisher_id) REFERENCES publishers(publisher_id)
 );
 
 DROP TABLE IF EXISTS publishers;
