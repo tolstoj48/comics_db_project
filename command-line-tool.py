@@ -42,7 +42,7 @@ def fetch_searching_opt_type(what):
         user_input_type = user_input_type.strip().lower()
     elif what == "p":
         user_input_type = input(
-            f"Would you like to get summary of a publisher [S] or fetch all the titles [A]?   ")
+            f"Would you like to get a summary and measures of central tendency of a publisher [S] or fetch all the titles of particular publisher[A]?   ")
         print("--------------------------------------------------------------------------")
         user_input_type = user_input_type.strip().lower()
     else:
@@ -143,7 +143,14 @@ def main():
             [print(f"Median age of titles in years: {round(publisher[1], 2)} ")
              for publisher in publishers_median_age]
         elif what_to_search == "p" and type_of_search == "a":
-            pass
+            s_input = input(
+                f"What publisher should I search for (the search is case insensitive)?   ")
+            s_input = s_input.strip().lower()
+            data_titles = get_all_data("t")
+            data_publishers = data[data["name"].str.contains(
+                s_input, case=False, na=False)]
+            data = data_titles.merge(
+                data_publishers, how="inner", on="publisher_id")
         if data.empty:
             print(
                 "--------------------------------------------------------------------------")
