@@ -88,7 +88,18 @@ def main():
             ft_input = int(ft_input.strip().lower())
             data = data[data["year"] == ft_input]
         if what_to_search == "p" and type_of_search == "s":
-            pass
+            s_input = input(f"What publisher should I search for (the search is case insensitive)?   ")
+            s_input = s_input.strip().lower()
+            data_titles = get_all_data("t")
+            data_publishers = data[data["name"].str.contains(s_input, case=False, na=False)]
+            data_all = data_titles.merge(data_publishers, how="inner", on="publisher_id")
+            data_count = data_all.groupby("name")["title_id"].count().reset_index()
+            publishers_count = data_count.values.tolist()
+            data_price = data_all.groupby("name")["price"].mean().reset_index()
+            publishers_mean_price = data_price.values.tolist()
+            [print(f"Publisher: {publisher[0]}: number of titles: {publisher[1]} ") for publisher in publishers_count]
+            [print(f"Publisher: {publisher[0]}: number of titles: {publisher[1]} ") for publisher in publishers_mean_price]
+            # TO DO: průměr cen, medián počtu, medián cen, průměr stáří, medián stáří/ přeuspořádat celé do fcí a pak do OOP
         elif what_to_search == "p" and type_of_search == "a":
             pass
         if data.empty:
@@ -96,7 +107,8 @@ def main():
             print(f"There are no results for the given search of: {ft_input}! Please try again.")
             print("--------------------------------------------------------------------------")
         else:
-            print(data)
+            #print(data)
+            pass
 
 if __name__ == "__main__":
     main()
