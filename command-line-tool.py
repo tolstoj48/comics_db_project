@@ -79,6 +79,7 @@ def main():
                 "--------------------------------------------------------------------------")
             print(
                 "Please, give me [T] for titles, [P] for publishers, [Q] for quit. Other choices are incorrect.")
+            continue
         if what_to_search == "t" and type_of_search not in ["ft", "y"]:
             type_of_search = fetch_searching_opt_type(what_to_search)
             if type_of_search not in ["ft", "y"]:
@@ -104,8 +105,11 @@ def main():
                 ft_input, case=False, na=False)]
         elif what_to_search == "t" and type_of_search == "y":
             ft_input = input(f"What year do you want to search for?   ")
-            ft_input = int(ft_input.strip().lower())
-            data = data[data["year"] == ft_input]
+            try: 
+                ft_input = int(ft_input.strip().lower())
+                data = data[data["year"] == ft_input]
+            except:
+                continue
         if what_to_search == "p" and type_of_search == "s":
             s_input = input(
                 f"What publisher should I search for (the search is case insensitive)?   ")
@@ -132,16 +136,8 @@ def main():
             median_year_diff = data_all.groupby(
                 "name")["year_diff"].median().reset_index()
             publishers_median_age = median_year_diff.values.tolist()
-            [print(f"Publisher: {publisher[0]}: number of titles: {publisher[1]} ")
-             for publisher in publishers_count]
-            [print(f"Mean price of titles: {round(publisher[1], 2)} ")
-             for publisher in publishers_mean_price]
-            [print(f"Median price of titles: {round(publisher[1], 2)} ")
-             for publisher in publishers_median_price]
-            [print(f"Mean age of titles in years: {round(publisher[1], 2)} ")
-             for publisher in publishers_mean_age]
-            [print(f"Median age of titles in years: {round(publisher[1], 2)} ")
-             for publisher in publishers_median_age]
+            [print(f"-------------------------- \n {publisher[0].upper()}: \n / Number of titles: {publisher[1]} / Mean price of titles: {round(publishers_mean_price[index][1], 2)} / Median price of titles: {round(publishers_median_price[index][1], 2)} / Mean age of titles in years: {round(publishers_mean_age[index][1], 2)} Median age of titles in years: {round(publishers_median_age[index][1], 2)}") for index, publisher in enumerate(publishers_count)]
+            data = data_all
         elif what_to_search == "p" and type_of_search == "a":
             s_input = input(
                 f"What publisher should I search for (the search is case insensitive)?   ")
@@ -158,12 +154,13 @@ def main():
                 f"There are no results for the given search of: {ft_input}! Please try again.")
             print(
                 "--------------------------------------------------------------------------")
+        elif what_to_search == "p" and type_of_search == "s":
+            continue
         else:
             pd.set_option("display.max_rows", None)
             data.drop(["title_id", "publisher_id"], axis=1, inplace=True)
             data.reset_index(drop=True, inplace=True)
             print(data)
-            pass
 
 
 if __name__ == "__main__":
