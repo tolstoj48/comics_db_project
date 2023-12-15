@@ -105,7 +105,7 @@ def main():
                 ft_input, case=False, na=False)]
         elif what_to_search == "t" and type_of_search == "y":
             ft_input = input(f"What year do you want to search for?   ")
-            try: 
+            try:
                 ft_input = int(ft_input.strip().lower())
                 data = data[data["year"] == ft_input]
             except:
